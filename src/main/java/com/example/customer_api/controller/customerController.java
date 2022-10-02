@@ -1,7 +1,13 @@
 package com.example.customer_api.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.customer_api.dto.request.addCustomerRequest;
+import com.example.customer_api.dto.request.exportExcelRequest;
 import com.example.customer_api.dto.request.searchCustomerRequest;
 import com.example.customer_api.dto.request.updateCustomerRequest;
 import com.example.customer_api.dto.response.customerResponse;
@@ -21,6 +28,7 @@ import com.example.customer_api.dto.response.deleteResponse;
 import com.example.customer_api.dto.response.insertResponse;
 import com.example.customer_api.dto.response.searchCustomerResponse;
 import com.example.customer_api.dto.response.updateResponse;
+import com.example.customer_api.helper.ExcelExporter;
 import com.example.customer_api.model.Customer;
 import com.example.customer_api.service.CustomerService;
 import com.example.customer_api.validation.CommonValidation;
@@ -277,5 +285,23 @@ public class customerController {
         }
     }
 
+    @PostMapping("/export/excel")
+    public void exportToExcel(HttpServletResponse response ,@RequestBody exportExcelRequest request) throws IOException {
+      
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+         
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=customers_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+         
+        List<Customer> listUsers = customerService.searchCustomerAll(request);
+         
+        ExcelExporter excelExporter = new ExcelExporter(listUsers);
+         
+        excelExporter.export(response);    
+         
+    }  
     
 }

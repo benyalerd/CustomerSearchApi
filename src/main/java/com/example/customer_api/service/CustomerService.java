@@ -1,5 +1,8 @@
 package com.example.customer_api.service;
 
+import java.io.IOException;
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +11,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import com.example.customer_api.dto.request.exportExcelRequest;
 import com.example.customer_api.dto.request.searchCustomerRequest;
+import com.example.customer_api.helper.ExcelExporter;
 import com.example.customer_api.model.Customer;
 import com.example.customer_api.repository.CustomerRepository;
 import com.example.customer_api.service.search.CustomerSpecification;
@@ -21,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomerService {
     
     @Autowired
-    CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     public Customer addCustomer(Customer customer)throws Throwable{
         
@@ -50,8 +55,22 @@ public class CustomerService {
 
     public Page<Customer> searchCustomer(searchCustomerRequest request)throws Throwable{
         Specification<Customer> spec = new CustomerSpecification(request);
-        Page<Customer> listArticle =customerRepository.findAll(spec,PageRequest.of(request.getPage(),request.getLimit()));
-        return listArticle;
+        Page<Customer> listCustomer =customerRepository.findAll(spec,PageRequest.of(request.getPage(),request.getLimit()));
+        return listCustomer;
+     }
+
+     public List<Customer> searchCustomerAll(exportExcelRequest request)throws IOException{
+
+        searchCustomerRequest req = new searchCustomerRequest();
+        req.setCitizenId(request.getCitizenId());
+        req.setEmail(request.getEmail());
+        req.setName(request.getName());
+        req.setTelephone(request.getTelephone());
+
+        Specification<Customer> spec = new CustomerSpecification(req);
+        List<Customer> listCustomer =customerRepository.findAll(spec);
+        
+        return listCustomer;
      }
 
 }

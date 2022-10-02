@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.customer_api.dto.request.checkOTPRequest;
+import com.example.customer_api.dto.request.sendOTPRequest;
 import com.example.customer_api.dto.request.userRequest;
+import com.example.customer_api.dto.response.checkOTPResponse;
+import com.example.customer_api.dto.response.sendOTPResponse;
 import com.example.customer_api.dto.response.userResponse;
 import com.example.customer_api.model.Users;
 import com.example.customer_api.service.UsersService;
@@ -127,6 +131,68 @@ public class userController {
 
                 response.setUserId(newUser.getUserId());
                 return ResponseEntity.ok(response);
+            }
+        }catch(Throwable t){
+            log.error("error occur ={}",t.getMessage());
+            response.setIsEror(true);
+            response.setErrorCode("500");
+            response.setErrorMsg("exception or server error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("sendOTP")
+    public ResponseEntity<Object> SendOTP(@RequestBody sendOTPRequest request)
+    {
+
+        sendOTPResponse response = new sendOTPResponse();
+        try{
+            var violations = validator.validate(request);           
+            log.info("violations = {}",violations);
+
+            if(!violations.isEmpty())
+            {
+                response.setIsEror(true);
+                response.setErrorCode("001");
+                response.setErrorMsg("invalid request");
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+            }
+            else
+            {
+                response = usersService.sendOTP(request);               
+                return ResponseEntity.ok(response);
+            
+            }
+        }catch(Throwable t){
+            log.error("error occur ={}",t.getMessage());
+            response.setIsEror(true);
+            response.setErrorCode("500");
+            response.setErrorMsg("exception or server error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("checkOTP")
+    public ResponseEntity<Object> checkOTP(@RequestBody checkOTPRequest request)
+    {
+
+        checkOTPResponse response = new checkOTPResponse();
+        try{
+            var violations = validator.validate(request);           
+            log.info("violations = {}",violations);
+
+            if(!violations.isEmpty())
+            {
+                response.setIsEror(true);
+                response.setErrorCode("001");
+                response.setErrorMsg("invalid request");
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+            }
+            else
+            {
+                response = usersService.checkOTP(request);               
+                return ResponseEntity.ok(response);
+            
             }
         }catch(Throwable t){
             log.error("error occur ={}",t.getMessage());

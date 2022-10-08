@@ -25,6 +25,7 @@ import com.example.customer_api.dto.request.searchCustomerRequest;
 import com.example.customer_api.dto.request.updateCustomerRequest;
 import com.example.customer_api.dto.response.customerResponse;
 import com.example.customer_api.dto.response.deleteResponse;
+import com.example.customer_api.dto.response.exportExcelResponse;
 import com.example.customer_api.dto.response.insertResponse;
 import com.example.customer_api.dto.response.searchCustomerResponse;
 import com.example.customer_api.dto.response.updateResponse;
@@ -183,9 +184,7 @@ public class customerController {
         response.setErrorMsg("success");
         response.setIsEror(false);
 
-        try{
-
-           
+        try{          
             if(customer_id == null)
             {
                 response.setIsEror(true);
@@ -304,4 +303,34 @@ public class customerController {
          
     }  
     
+    @PostMapping("/attachment/customerinfo")
+    public ResponseEntity<Object> sendCustomerAttachment(@RequestBody exportExcelRequest request)
+    {
+
+        exportExcelResponse response = new exportExcelResponse();
+        try{
+            var violations = validator.validate(request);           
+            log.info("violations = {}",violations);
+
+            if(!violations.isEmpty())
+            {
+                response.setIsEror(true);
+                response.setErrorCode("001");
+                response.setErrorMsg("invalid request");
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+            }
+            else
+            {
+                response = customerService.sendCustomerAttachment(request);               
+                return ResponseEntity.ok(response);
+            
+            }
+        }catch(Throwable t){
+            log.error("error occur ={}",t.getMessage());
+            response.setIsEror(true);
+            response.setErrorCode("500");
+            response.setErrorMsg("exception or server error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
 }

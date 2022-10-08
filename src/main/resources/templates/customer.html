@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        h1{
+            color: tomato;
+        }
+        .customer {
+            width: 100%;
+        }
+        .customer, .customer th, .customer td {
+            border: 1px solid tomato;
+            border-collapse: collapse;
+        }
+        .customer th {
+            background-color: tomato;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<h1>Customer Information</h1>
+
+<table class="customer">
+    <tr>
+        <th style="text-align:center;">First Name</th>
+        <th style="text-align:center;">Last name</th>
+        <th style="text-align:center;">Citizen ID</th>
+        <th style="text-align:center;">Email</th>
+        <th style="text-align:center;">Tel.</th>
+    </tr>
+    <tr th:each="item, iterStat: ${customerList}">
+        <td th:text="${item.customerName}"></td>
+        <td th:text="${item.customerLastname}"></td>
+        <td th:text="${item.citizenId}"></td>
+        <td th:text="${item.email}"></td>
+        <td th:text="${item.telephone}"></td>
+    </tr>
+</table>
+</body>
+</html>

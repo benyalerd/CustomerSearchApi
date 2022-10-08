@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,27 @@ public class MailService {
             helper.setFrom("benyademofordev.demo@gmail.com");
             helper.setSubject("Demo:รหัสเพื่อยืนยันการเข้าสู่ระบบ");
             helper.setText(html, true);
+            mailSender.send(message);
+            log.info("Email has been sent to :" + mailTo);
+        } catch (MessagingException | IOException | TemplateException e) {
+            log.info("Email send failure to :" + mailTo);
+        }
+    }
+
+    public void sendCustomerMail(String mailTo, Map<String, String> model) {
+       
+        MimeMessage message = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                    StandardCharsets.UTF_8.name());
+                    ClassPathResource pdf = new ClassPathResource("static/customer_information.pdf");
+            Template template = configuration.getTemplate("customerEmail.ftl");
+            String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+            helper.setTo(mailTo);
+            helper.setFrom("benyademofordev.demo@gmail.com");
+            helper.setSubject("Customer Information:ข้อมูลลูกค้า");
+            helper.setText(html, true);
+            helper.addAttachment("attachment.pdf", pdf);
             mailSender.send(message);
             log.info("Email has been sent to :" + mailTo);
         } catch (MessagingException | IOException | TemplateException e) {

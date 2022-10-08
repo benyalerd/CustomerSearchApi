@@ -1,7 +1,9 @@
 package com.example.customer_api.service;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -13,9 +15,12 @@ import org.springframework.stereotype.Component;
 
 import com.example.customer_api.dto.request.exportExcelRequest;
 import com.example.customer_api.dto.request.searchCustomerRequest;
-import com.example.customer_api.helper.ExcelExporter;
+import com.example.customer_api.dto.response.exportExcelResponse;
+import com.example.customer_api.helper.MailService;
+import com.example.customer_api.helper.PdfGenerate;
 import com.example.customer_api.model.Customer;
 import com.example.customer_api.repository.CustomerRepository;
+import com.example.customer_api.repository.UserRepository;
 import com.example.customer_api.service.search.CustomerSpecification;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +32,15 @@ public class CustomerService {
     
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private PdfGenerate pdfGen;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private MailService mailService;
 
     public Customer addCustomer(Customer customer)throws Throwable{
         
@@ -73,4 +87,37 @@ public class CustomerService {
         return listCustomer;
      }
 
+     public exportExcelResponse sendCustomerAttachment(exportExcelRequest request)throws Throwable{
+        exportExcelResponse response = new exportExcelResponse();
+        response.setErrorCode("200");
+        response.setErrorMsg("success");
+        response.setIsEror(false);
+        response.setIsExportSuccess(true);
+        
+        var user = userRepository.findById(request.getUserId()).get();
+        if(user == null){
+            response.setIsEror(true);
+            response.setErrorCode("001");
+            response.setErrorMsg("user id is not found");
+            response.setIsExportSuccess(false);
+            return response;
+        }
+        else{
+            var customerList = searchCustomerAll(request);
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("customerList",customerList);
+
+            pdfGen.generatePdfFile("customer.html", data,"\\customer_information.pdf");
+
+            String mailTo = user.getEmail();
+            Map<String, String> model = new HashMap<>();
+            model.put("email", mailTo);
+            mailService.sendCustomerMail(mailTo, model);    
+           
+        }
+        return response;
+       
+        }
+    
 }

@@ -44,7 +44,7 @@ public class userController {
         userResponse response = new userResponse();
         response.setErrorCode("200");
         response.setErrorMsg("success");
-        response.setIsEror(false);
+        response.setIsError(false);
         try{
             var violations = validator.validate(user);           
             log.info("violations = {}",violations);
@@ -52,7 +52,7 @@ public class userController {
             var addValidate = commonValidation.usersValidate(user);
             if(!violations.isEmpty() || !addValidate)
             {
-                response.setIsEror(true);
+                response.setIsError(true);
                 response.setErrorCode("001");
                 response.setErrorMsg("invalid request");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -61,9 +61,16 @@ public class userController {
             {
                 var isexistingEmail = commonValidation.checkExistingUserByEmail(user.getEmail());
                 if(isexistingEmail){
-                    response.setIsEror(true);
+                    response.setIsError(true);
                     response.setErrorCode("001");
                     response.setErrorMsg("email is exist");
+                    return ResponseEntity.status(HttpStatus.OK).body(response);
+                }
+                if(!(user.getPassword().equals(user.getRepeatPassword())))
+                {
+                    response.setIsError(true);
+                    response.setErrorCode("001");
+                    response.setErrorMsg("password is not match");
                     return ResponseEntity.status(HttpStatus.OK).body(response);
                 }
                 var mapper = new ModelMapper();
@@ -75,7 +82,7 @@ public class userController {
                 var newUser = usersService.registerUser(requetUser);
 
                 if(newUser == null){
-                    response.setIsEror(true);
+                    response.setIsError(true);
                     response.setErrorCode("002");
                     response.setErrorMsg("insert failed");
                     return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -86,7 +93,7 @@ public class userController {
             }
         }catch(Throwable t){
             log.error("error occur ={}",t.getMessage());
-            response.setIsEror(true);
+            response.setIsError(true);
             response.setErrorCode("500");
             response.setErrorMsg("exception or server error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -100,7 +107,7 @@ public class userController {
         userResponse response = new userResponse();
         response.setErrorCode("200");
         response.setErrorMsg("success");
-        response.setIsEror(false);
+        response.setIsError(false);
         try{
             var violations = validator.validate(user);           
             log.info("violations = {}",violations);
@@ -108,7 +115,7 @@ public class userController {
             var addValidate = commonValidation.usersValidate(user);
             if(!violations.isEmpty() || !addValidate)
             {
-                response.setIsEror(true);
+                response.setIsError(true);
                 response.setErrorCode("001");
                 response.setErrorMsg("invalid request");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -123,7 +130,7 @@ public class userController {
                 var newUser = usersService.login(user.getEmail(),user.getPassword());
 
                 if(newUser == null){
-                    response.setIsEror(true);
+                    response.setIsError(true);
                     response.setErrorCode("002");
                     response.setErrorMsg("email or password is incorrect.");
                     return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -134,7 +141,7 @@ public class userController {
             }
         }catch(Throwable t){
             log.error("error occur ={}",t.getMessage());
-            response.setIsEror(true);
+            response.setIsError(true);
             response.setErrorCode("500");
             response.setErrorMsg("exception or server error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -152,7 +159,7 @@ public class userController {
 
             if(!violations.isEmpty())
             {
-                response.setIsEror(true);
+                response.setIsError(true);
                 response.setErrorCode("001");
                 response.setErrorMsg("invalid request");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -165,7 +172,7 @@ public class userController {
             }
         }catch(Throwable t){
             log.error("error occur ={}",t.getMessage());
-            response.setIsEror(true);
+            response.setIsError(true);
             response.setErrorCode("500");
             response.setErrorMsg("exception or server error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -183,7 +190,7 @@ public class userController {
 
             if(!violations.isEmpty())
             {
-                response.setIsEror(true);
+                response.setIsError(true);
                 response.setErrorCode("001");
                 response.setErrorMsg("invalid request");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -196,7 +203,7 @@ public class userController {
             }
         }catch(Throwable t){
             log.error("error occur ={}",t.getMessage());
-            response.setIsEror(true);
+            response.setIsError(true);
             response.setErrorCode("500");
             response.setErrorMsg("exception or server error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);

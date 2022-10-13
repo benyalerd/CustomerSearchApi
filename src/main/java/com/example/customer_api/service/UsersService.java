@@ -65,11 +65,11 @@ public class UsersService {
     sendOTPResponse response = new sendOTPResponse();
     response.setErrorCode("200");
     response.setErrorMsg("success");
-    response.setIsEror(false);
+    response.setIsError(false);
     
     var user = userRepository.findById(request.getUserId()).get();
     if(user == null){
-        response.setIsEror(true);
+        response.setIsError(true);
         response.setErrorCode("001");
         response.setErrorMsg("user id is not found");
         return response;
@@ -99,11 +99,11 @@ public class UsersService {
    checkOTPResponse response = new checkOTPResponse();
    response.setErrorCode("200");
     response.setErrorMsg("success");
-    response.setIsEror(false);
+    response.setIsError(false);
     
     var user = userRepository.findById(request.getUserId()).get();
     if(user == null){
-        response.setIsEror(true);
+        response.setIsError(true);
         response.setErrorCode("001");
         response.setErrorMsg("user id is not found");
         return response;

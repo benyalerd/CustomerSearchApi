@@ -12,4 +12,5 @@ public class userRequest {
     private String email;
     @NotNull
     private String password;
+    private String repeatPassword;
 }

@@ -91,12 +91,12 @@ public class CustomerService {
         exportExcelResponse response = new exportExcelResponse();
         response.setErrorCode("200");
         response.setErrorMsg("success");
-        response.setIsEror(false);
+        response.setIsError(false);
         response.setIsExportSuccess(true);
         
         var user = userRepository.findById(request.getUserId()).get();
         if(user == null){
-            response.setIsEror(true);
+            response.setIsError(true);
             response.setErrorCode("001");
             response.setErrorMsg("user id is not found");
             response.setIsExportSuccess(false);

@@ -60,7 +60,7 @@ public class customerController {
         insertResponse response = new insertResponse();
         response.setErrorCode("200");
         response.setErrorMsg("success");
-        response.setIsEror(false);
+        response.setIsError(false);
         try{
             var violations = validator.validate(customer);           
             log.info("violations = {}",violations);
@@ -68,7 +68,7 @@ public class customerController {
             var addValidate = commonValidation.addCustomerValidate(customer);
             if(!violations.isEmpty() || !addValidate)
             {
-                response.setIsEror(true);
+                response.setIsError(true);
                 response.setErrorCode("001");
                 response.setErrorMsg("invalid request");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -77,14 +77,14 @@ public class customerController {
             {
                 var isExistingUser = commonValidation.checkExistingUser(customer.getUserId());
                 if(!isExistingUser){
-                    response.setIsEror(true);
+                    response.setIsError(true);
                     response.setErrorCode("001");
                     response.setErrorMsg("user id is not found");
                     return ResponseEntity.status(HttpStatus.OK).body(response);
                 }
                 var isExistingCustomer = commonValidation.checkExistingCustomer(customer.getEmail(),customer.getCitizenId());
                 if(isExistingCustomer){
-                    response.setIsEror(true);
+                    response.setIsError(true);
                     response.setErrorCode("001");
                     response.setErrorMsg("citizen id or email is exist");
                     return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -98,7 +98,7 @@ public class customerController {
                 var newCustomer = customerService.addCustomer(requetCustomer);
 
                 if(newCustomer == null){
-                    response.setIsEror(true);
+                    response.setIsError(true);
                     response.setErrorCode("002");
                     response.setErrorMsg("insert failed");
                     return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -109,7 +109,7 @@ public class customerController {
             }
         }catch(Throwable t){
             log.error("error occur ={}",t.getMessage());
-            response.setIsEror(true);
+            response.setIsError(true);
             response.setErrorCode("500");
             response.setErrorMsg("exception or server error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -123,7 +123,7 @@ public class customerController {
         updateResponse response = new updateResponse();
         response.setErrorCode("200");
         response.setErrorMsg("success");
-        response.setIsEror(false);
+        response.setIsError(false);
 
         try{
 
@@ -134,7 +134,7 @@ public class customerController {
 
             if(!violations.isEmpty() || !updateValidate)
             {
-                response.setIsEror(true);
+                response.setIsError(true);
                 response.setErrorCode("001");
                 response.setErrorMsg("invalid request");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -147,7 +147,7 @@ public class customerController {
                         .setMatchingStrategy(MatchingStrategies.STRICT);
                         var isExistingUser = commonValidation.checkExistingUser(newCustomer.getUserId());
                         if(!isExistingUser){
-                            response.setIsEror(true);
+                            response.setIsError(true);
                             response.setErrorCode("001");
                             response.setErrorMsg("user id is not found");
                             return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -155,7 +155,7 @@ public class customerController {
                 var customer = customerService.updateCustomer(customer_id,mapper.map(newCustomer,Customer.class));
                 if(customer == null)
                 {
-                    response.setIsEror(true);
+                    response.setIsError(true);
                     response.setErrorCode("003");
                     response.setErrorMsg("update failed");
                     return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -167,7 +167,7 @@ public class customerController {
         } catch(Throwable t){
 
             log.error("error occur={}",t.getMessage());
-            response.setIsEror(true);
+            response.setIsError(true);
             response.setErrorCode("500");
             response.setErrorMsg("exception or server error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -182,12 +182,12 @@ public class customerController {
         deleteResponse response = new deleteResponse();
         response.setErrorCode("200");
         response.setErrorMsg("success");
-        response.setIsEror(false);
+        response.setIsError(false);
 
         try{          
             if(customer_id == null)
             {
-                response.setIsEror(true);
+                response.setIsError(true);
                 response.setErrorCode("001");
                 response.setErrorMsg("invalid request");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -200,7 +200,7 @@ public class customerController {
                         .setMatchingStrategy(MatchingStrategies.STRICT);
                         var isExistingUser = commonValidation.checkExistingUser(user_id);
                         if(!isExistingUser){
-                            response.setIsEror(true);
+                            response.setIsError(true);
                             response.setErrorCode("001");
                             response.setErrorMsg("user id is not found");
                             return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -208,7 +208,7 @@ public class customerController {
                 var customer = customerService.deleteCustomer(customer_id);
                 if(customer == null)
                 {
-                    response.setIsEror(true);
+                    response.setIsError(true);
                     response.setErrorCode("003");
                     response.setErrorMsg("delete failed");
                     return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -220,7 +220,7 @@ public class customerController {
         } catch(Throwable t){
 
             log.error("error occur={}",t.getMessage());
-            response.setIsEror(true);
+            response.setIsError(true);
             response.setErrorCode("500");
             response.setErrorMsg("exception or server error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -235,14 +235,14 @@ public class customerController {
         searchCustomerResponse response = new searchCustomerResponse();
         response.setErrorCode("200");
         response.setErrorMsg("success");
-        response.setIsEror(false);
+        response.setIsError(false);
         try{
             var violations = validator.validate(customer);           
             log.info("violations = {}",violations);
 
             if(!violations.isEmpty())
             {
-                response.setIsEror(true);
+                response.setIsError(true);
                 response.setErrorCode("001");
                 response.setErrorMsg("invalid request");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -251,7 +251,7 @@ public class customerController {
             {
                 var isExistingUser = commonValidation.checkExistingUser(customer.getUserId());
                 if(!isExistingUser){
-                    response.setIsEror(true);
+                    response.setIsError(true);
                     response.setErrorCode("001");
                     response.setErrorMsg("user id is not found");
                     return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -272,12 +272,12 @@ public class customerController {
             
             response.setErrorCode("200");
             response.setErrorMsg("success");
-            response.setIsEror(false);
+            response.setIsError(false);
             return ResponseEntity.ok(response);
             }
         }catch(Throwable t){
             log.error("error occur ={}",t.getMessage());
-            response.setIsEror(true);
+            response.setIsError(true);
             response.setErrorCode("500");
             response.setErrorMsg("exception or server error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -314,7 +314,7 @@ public class customerController {
 
             if(!violations.isEmpty())
             {
-                response.setIsEror(true);
+                response.setIsError(true);
                 response.setErrorCode("001");
                 response.setErrorMsg("invalid request");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -327,7 +327,7 @@ public class customerController {
             }
         }catch(Throwable t){
             log.error("error occur ={}",t.getMessage());
-            response.setIsEror(true);
+            response.setIsError(true);
             response.setErrorCode("500");
             response.setErrorMsg("exception or server error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);

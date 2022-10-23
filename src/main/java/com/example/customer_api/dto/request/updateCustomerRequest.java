@@ -17,6 +17,7 @@ public class updateCustomerRequest {
     @Length(max = 50)
     private String customerLastname;
     private String telephone;
+    private String email;
     @NotNull
     private Long userId;
 }

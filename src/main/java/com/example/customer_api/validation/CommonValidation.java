@@ -67,7 +67,12 @@ public class CommonValidation {
 
     public Boolean updateCustomerValidate(updateCustomerRequest request){
        
-        if(!CheckEmptyOrNull(request.getTelephone())){
+        if(!CheckEmptyOrNull(request.getEmail())){
+            if(!checkEmail(request.getEmail())){
+               return false;
+            }
+         }
+         if(!CheckEmptyOrNull(request.getTelephone())){
             if(!checkTelephone(request.getTelephone())){
                return false;
             }
@@ -134,7 +139,7 @@ if(id.length() == 13)
     var step1 = (Integer.parseInt(String.valueOf(id.charAt(0)))*13)+(Integer.parseInt(String.valueOf(id.charAt(1)))*12)+(Integer.parseInt(String.valueOf(id.charAt(2)))*11)+(Integer.parseInt(String.valueOf(id.charAt(3)))*10)+(Integer.parseInt(String.valueOf(id.charAt(4)))*9)+(Integer.parseInt(String.valueOf(id.charAt(5)))*8)+(Integer.parseInt(String.valueOf(id.charAt(6)))*7)+(Integer.parseInt(String.valueOf(id.charAt(7)))*6)+(Integer.parseInt(String.valueOf(id.charAt(8)))*5)+(Integer.parseInt(String.valueOf(id.charAt(9)))*4)+(Integer.parseInt(String.valueOf(id.charAt(10)))*3)+(Integer.parseInt(String.valueOf(id.charAt(11)))*2);
     var step2 = step1%11;
     var step3 = 11-step2;
-    if(String.valueOf(step3).equalsIgnoreCase(String.valueOf(id.charAt(12)))){
+    if(String.valueOf(String.valueOf(step3).charAt(String.valueOf(step3).length()-1)).equalsIgnoreCase(String.valueOf(id.charAt(12)))){
         return true;
     }
 }

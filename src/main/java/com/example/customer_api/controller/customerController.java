@@ -139,6 +139,13 @@ public class customerController {
                 response.setErrorMsg("invalid request");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
             }
+            var isExistingCustomer = commonValidation.checkExistingCustomer(newCustomer.getEmail(),"");
+            if(isExistingCustomer){
+                response.setIsError(true);
+                response.setErrorCode("001");
+                response.setErrorMsg("email is exist");
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+            }
             else
             {
 

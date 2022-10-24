@@ -139,13 +139,6 @@ public class customerController {
                 response.setErrorMsg("invalid request");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
             }
-            var isExistingCustomer = commonValidation.checkExistingCustomer(newCustomer.getEmail(),"");
-            if(isExistingCustomer){
-                response.setIsError(true);
-                response.setErrorCode("001");
-                response.setErrorMsg("email is exist");
-                return ResponseEntity.status(HttpStatus.OK).body(response);
-            }
             else
             {
 
@@ -165,6 +158,12 @@ public class customerController {
                     response.setIsError(true);
                     response.setErrorCode("003");
                     response.setErrorMsg("update failed");
+                    return ResponseEntity.status(HttpStatus.OK).body(response);
+                }
+                else if(customer.getCustomerId() == null){
+                    response.setIsError(true);
+                    response.setErrorCode("001");
+                    response.setErrorMsg("email is already exits");
                     return ResponseEntity.status(HttpStatus.OK).body(response);
                 }
 
@@ -295,7 +294,7 @@ public class customerController {
     public void exportToExcel(HttpServletResponse response ,@RequestBody exportExcelRequest request) throws IOException {
       
         response.setContentType("application/octet-stream");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
         String currentDateTime = dateFormatter.format(new Date());
          
         String headerKey = "Content-Disposition";

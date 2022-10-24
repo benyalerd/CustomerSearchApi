@@ -22,6 +22,7 @@ import com.example.customer_api.model.Customer;
 import com.example.customer_api.repository.CustomerRepository;
 import com.example.customer_api.repository.UserRepository;
 import com.example.customer_api.service.search.CustomerSpecification;
+import com.example.customer_api.validation.CommonValidation;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,6 +43,9 @@ public class CustomerService {
     @Autowired
     private MailService mailService;
 
+    @Autowired
+    private CommonValidation commonValidation;
+
     public Customer addCustomer(Customer customer)throws Throwable{
         
         Customer newCustomer = customerRepository.save(customer);
@@ -52,9 +56,19 @@ public class CustomerService {
         var exitingCustomer = customerRepository.findById(customerId).get();
         if(exitingCustomer == null) return null;
 
+        if(customer.getEmail()!= null && !exitingCustomer.getEmail().equalsIgnoreCase(customer.getEmail())){
+            var isExistingCustomer = commonValidation.checkExistingCustomer(customer.getEmail(),"");
+            if(isExistingCustomer){
+              return new Customer();
+            } 
+            else
+            {
+                exitingCustomer.setEmail(customer.getEmail());
+            }           
+        }
+        
         if(customer.getCustomerName()!=null)exitingCustomer.setCustomerName(customer.getCustomerName());;
         if(customer.getCustomerLastname()!=null)exitingCustomer.setCustomerLastname(customer.getCustomerLastname());
-        if(customer.getEmail()!=null)exitingCustomer.setEmail(customer.getEmail());;
         if(customer.getTelephone()!=null)exitingCustomer.setTelephone(customer.getTelephone());
 
         return customerRepository.save(exitingCustomer);

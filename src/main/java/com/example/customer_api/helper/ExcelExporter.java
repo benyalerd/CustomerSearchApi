@@ -72,7 +72,7 @@ public class ExcelExporter {
             Row row = sheet.createRow(rowCount++);
             int columnCount = 0;
              
-            createCell(row, columnCount++, user.getCustomerId(), style);
+            createCell(row, columnCount++, user.getCustomerId().toString(), style);
             createCell(row, columnCount++, user.getCustomerName(), style);
             createCell(row, columnCount++, user.getCustomerLastname(), style);
             createCell(row, columnCount++, user.getCitizenId(), style);

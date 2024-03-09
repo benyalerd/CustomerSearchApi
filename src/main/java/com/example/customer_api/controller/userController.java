@@ -38,7 +38,7 @@ public class userController {
     private UsersService usersService;
 
     @PostMapping("addUser")
-    public ResponseEntity<Object> AddUser(@RequestBody userRequest user)
+    public ResponseEntity<Object> addUser(@RequestBody userRequest user)
     {
 
         userResponse response = new userResponse();
@@ -101,7 +101,7 @@ public class userController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<Object> Login(@RequestBody userRequest user)
+    public ResponseEntity<Object> login(@RequestBody userRequest user)
     {
 
         userResponse response = new userResponse();
@@ -149,7 +149,7 @@ public class userController {
     }
 
     @PostMapping("sendOTP")
-    public ResponseEntity<Object> SendOTP(@RequestBody sendOTPRequest request)
+    public ResponseEntity<Object> sendOTP(@RequestBody sendOTPRequest request)
     {
 
         sendOTPResponse response = new sendOTPResponse();

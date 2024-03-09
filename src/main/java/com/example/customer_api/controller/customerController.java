@@ -54,7 +54,7 @@ public class customerController {
     private CustomerService customerService;
 
     @PostMapping("addCustomer")
-    public ResponseEntity<Object> AddCustomer(@RequestBody addCustomerRequest customer)
+    public ResponseEntity<Object> addCustomer(@RequestBody addCustomerRequest customer)
     {
 
         insertResponse response = new insertResponse();

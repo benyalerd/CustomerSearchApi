@@ -19,7 +19,7 @@ public class CustomerSpecification implements Specification<Customer>{
         this.filter = filter;
     }
     
-    public boolean CheckNullAndEmpty(String text)
+    public boolean checkNullAndEmpty(String text)
     {
         return text != null && !text.isEmpty();
     }
@@ -28,16 +28,16 @@ public class CustomerSpecification implements Specification<Customer>{
         Predicate p = criteriaBuilder.conjunction();
 
         
-        if (CheckNullAndEmpty(filter.getCitizenId())) {
+        if (checkNullAndEmpty(filter.getCitizenId())) {
          p.getExpressions().add(criteriaBuilder.and(criteriaBuilder.like(root.get("citizenId"), "%"+filter.getCitizenId()+"%")));
         }
-        if (CheckNullAndEmpty(filter.getTelephone())) {
+        if (checkNullAndEmpty(filter.getTelephone())) {
             p.getExpressions().add(criteriaBuilder.and(criteriaBuilder.like(root.get("telephone"), "%"+filter.getTelephone()+"%")));
         }
-        if (CheckNullAndEmpty(filter.getEmail())) {
+        if (checkNullAndEmpty(filter.getEmail())) {
             p.getExpressions().add(criteriaBuilder.and(criteriaBuilder.like(root.get("email"), "%"+filter.getEmail()+"%")));
         }
-        if (CheckNullAndEmpty(filter.getName())) {
+        if (checkNullAndEmpty(filter.getName())) {
             var custSplit = filter.getName().split(" ");
             var custName = "";
             var custLastname = "";

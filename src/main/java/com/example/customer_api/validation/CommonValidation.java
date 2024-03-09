@@ -105,7 +105,7 @@ public class CommonValidation {
         return true;
     }
 
-    public Boolean CheckEmptyOrNull(String text){
+    public Boolean checkEmptyOrNull(String text){
         if(text == null){
             return true;
         }else if(text.equalsIgnoreCase("")){

@@ -4,7 +4,7 @@ UserController
  - API Register 
  - API Log in
  - API Send Request OTP : service for sending otp mail to user and then user enter otp in fill to login verification.
- - Ap![otpmail](https://user-images.githubusercontent.com/62868362/195829135-33c221b4-35fd-4191-8af2-751b429e313a.png)
+![otpmail](https://user-images.githubusercontent.com/62868362/195829135-33c221b4-35fd-4191-8af2-751b429e313a.png)
 I Check OTP : service for corrct otp that user fill in the blank.
 
 #
